@@ -157,7 +157,7 @@ const login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
-        { expiresIn: '7d'},
+        { expiresIn: '7d' },
         null,
       );
       res.send({ token });
