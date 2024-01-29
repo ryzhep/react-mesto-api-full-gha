@@ -6,7 +6,7 @@ const { CastError, ValidationError } = require('mongoose').Error;
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
-//const UnauthorizedError = require('../errors/UnauthorizedError');
+// const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const UserModel = require('../models/user');
 const { CREATED_201 } = require('../utils/constants');
