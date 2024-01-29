@@ -20,8 +20,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
     );
   } catch (err) {
-    next(new UnauthorizedError('Требуется авторизация'));
-    return;
+    return next(new UnauthorizedError('Требуется авторизация'));
   }
 
   req.user = payload;
