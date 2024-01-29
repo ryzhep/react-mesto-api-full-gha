@@ -1,3 +1,4 @@
+const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -151,30 +152,16 @@ const updateUserAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return UserModel.findOne({ email })
-    .select('+password')
+  UserModel.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        return Promise.reject(
-          new UnauthorizedError('Неправильные почта или пароль'),
-        );
-      }
-
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          return Promise.reject(
-            new UnauthorizedError('Неправильные почта или пароль'),
-          );
-        }
-        return res.status(200).send({
-          message: 'Успешно авторизован',
-          token: jwt.sign({ _id: user._id }, 'super-strong-secret', {
-            expiresIn: '7d',
-          }),
-        });
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
+        { expiresIn: '7d'},
+        null,
+      );
+      res.send({ token });
     })
-    .catch(() => next(new UnauthorizedError('ошибка')))
     .catch(next);
 };
 
