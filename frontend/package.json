@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "npm run build && scp -r ./dist/* ryzhep@158.160.27.101:/home/ryzhep/frontend"
-
   },
   "dependencies": {
     "express": "^4.18.2",
