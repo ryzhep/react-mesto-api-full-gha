@@ -11,7 +11,7 @@ const ConflictError = require('../errors/ConflictError');
 const UserModel = require('../models/user');
 const { CREATED_201 } = require('../utils/constants');
 
-const NotError = 200;
+// const NotError = 200;
 
 // ВСЕ ПОЛЬЗОВАТЕЛИ
 // eslint-disable-next-line consistent-return
@@ -46,7 +46,13 @@ const getCurrentUser = (req, res, next) => {
   UserModel.findById(_id)
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
-      res.status(NotError).send({ data: user });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
+        { expiresIn: '7d' },
+        null,
+      );
+      res.send({ token });
     })
     .catch((err) => {
       if (err instanceof CastError) {
