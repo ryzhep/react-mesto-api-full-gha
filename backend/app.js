@@ -28,6 +28,12 @@ app.use((req, res, next) => {
 */
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // роутер
 app.use(appRouter);
 app.use(errorLogger);
