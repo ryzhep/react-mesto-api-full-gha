@@ -6,7 +6,7 @@ const { CastError, ValidationError } = require('mongoose').Error;
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
-// const UnauthorizedError = require('../errors/UnauthorizedError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const UserModel = require('../models/user');
 const { CREATED_201 } = require('../utils/constants');
@@ -157,8 +157,9 @@ const updateUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
-  UserModel.findUserByCredentials(email, password)
+  console.log('test');
+  return UserModel.findOne({ email })
+    .select('+password')
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
@@ -166,8 +167,29 @@ const login = (req, res, next) => {
         { expiresIn: '7d' },
         null,
       );
+      console.log(token);
       res.send({ token });
+      if (!user) {
+        return Promise.reject(
+          new UnauthorizedError('Неправильные почта или пароль'),
+        );
+      }
+
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(
+            new UnauthorizedError('Неправильные почта или пароль'),
+          );
+        }
+        return res.status(200).send({
+          message: 'Успешно авторизован',
+          token: jwt.sign({ _id: user._id }, 'super-strong-secret', {
+            expiresIn: '7d',
+          }),
+        });
+      });
     })
+    .catch(() => next(new UnauthorizedError('ошибка')))
     .catch(next);
 };
 

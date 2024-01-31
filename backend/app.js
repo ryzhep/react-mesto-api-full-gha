@@ -9,7 +9,7 @@ const appRouter = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
-
+console.log('test3');
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 app.use(express.json());
 
