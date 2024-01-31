@@ -25,7 +25,7 @@ class Api {
       method: "GET",
       //headers: this._headers,
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
   }
@@ -35,8 +35,8 @@ class Api {
     const token = localStorage.getItem('jwt');
     return this._sendRequest(`${this._url}/users/me`, {
       method: "GET",
-      headers:{
-        authorization: `Bearer ${token}`
+      headers: {
+        Authorization: `Bearer ${token}`
       }
     });
   }
@@ -47,7 +47,7 @@ class Api {
     return this._sendRequest(`${this._url}/users/me`, {
       method: "PATCH",
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         name: data.name,
@@ -62,7 +62,7 @@ class Api {
     return this._sendRequest(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         avatar: avatar.avatar
@@ -76,7 +76,7 @@ class Api {
     return this._sendRequest(`${this._url}/cards`, {
       method: "POST",
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         name: newCard.name,
@@ -91,7 +91,7 @@ class Api {
     return this._sendRequest(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
     });
   }
@@ -103,7 +103,7 @@ class Api {
     return this._sendRequest(`${this._url}/cards/${cardId}/likes`, {
       method: isLiked ? 'DELETE' : 'PUT',
       headers:{
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
     });
   }
