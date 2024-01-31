@@ -1,15 +1,15 @@
 const { NODE_ENV, JWT_SECRET } = process.env;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-const { CastError, ValidationError } = require("mongoose").Error;
-const NotFoundError = require("../errors/NotFoundError");
-const BadRequestError = require("../errors/BadRequestError");
-const ConflictError = require("../errors/ConflictError");
-const UnauthorizedError = require("../errors/UnauthorizedError");
+const { CastError, ValidationError } = require('mongoose').Error;
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+const ConflictError = require('../errors/ConflictError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const UserModel = require("../models/user");
-const { CREATED_201 } = require("../utils/constants");
+const UserModel = require('../models/user');
+const { CREATED_201 } = require('../utils/constants');
 
 // const NotError = 200;
 
@@ -28,13 +28,13 @@ const getUserById = (req, res, next) => {
   return UserModel.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Такого пользователя не существует");
+        throw new NotFoundError('Такого пользователя не существует');
       }
       res.send(user);
     })
     .catch((err) => {
       if (err instanceof CastError) {
-        next(new BadRequestError("Некорректный id пользователя"));
+        next(new BadRequestError('Некорректный id пользователя'));
       } else {
         next(err);
       }
@@ -44,19 +44,19 @@ const getUserById = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
   UserModel.findById(_id)
-    .orFail(() => new NotFoundError("Пользователь не найден"))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "super_secret_key",
-        { expiresIn: "7d" },
-        null
+        NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
+        { expiresIn: '7d' },
+        null,
       );
       res.send({ token });
     })
     .catch((err) => {
       if (err instanceof CastError) {
-        return next(new BadRequestError("Некорректный id пользователя"));
+        return next(new BadRequestError('Некорректный id пользователя'));
       }
       return next(err);
     });
@@ -64,7 +64,13 @@ const getCurrentUser = (req, res, next) => {
 
 // СОЗДАНИЕ ПОЛЬЗОВАТЕЛЯ
 const createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) => {
@@ -76,7 +82,7 @@ const createUser = (req, res, next) => {
         password: hash,
       })
         .then((data) => {
-          console.log("create user", data);
+          console.log('create user', data);
           return res.status(CREATED_201).json({
             name,
             about,
@@ -86,10 +92,10 @@ const createUser = (req, res, next) => {
         })
         .catch((err) => {
           if (err.code === 11000) {
-            return next(new ConflictError("Такой email уже существует")); // 409
+            return next(new ConflictError('Такой email уже существует')); // 409
           }
-          if (err.name === "ValidationError") {
-            return next(new BadRequestError("Ошибка валидации"));
+          if (err.name === 'ValidationError') {
+            return next(new BadRequestError('Ошибка валидации'));
           }
           return next(err);
         });
@@ -106,11 +112,11 @@ const updateUser = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Такого пользователя не существует");
+        throw new NotFoundError('Такого пользователя не существует');
       }
       res.send(user);
     })
@@ -118,7 +124,7 @@ const updateUser = (req, res, next) => {
       if (err instanceof ValidationError) {
         const errorMessage = Object.values(err.errors)
           .map((error) => error.message)
-          .join(", ");
+          .join(', ');
         next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       } else {
         next(err);
@@ -135,17 +141,17 @@ const updateUserAvatar = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Такого пользователя не существует");
+        throw new NotFoundError('Такого пользователя не существует');
       }
       res.send(user);
     })
     .catch((err) => {
       if (err instanceof CastError) {
-        next(new BadRequestError("Некорректный id пользователя"));
+        next(new BadRequestError('Некорректный id пользователя'));
       } else {
         next(err);
       }
@@ -154,47 +160,45 @@ const updateUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  console.log("test", email);
+  console.log('test', email);
   return UserModel.findOne({ email })
-    .select("+password")
+    .select('+password')
     .then((user) => {
-      console.log("user", user);
+      console.log('user', user);
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "super_secret_key",
-        { expiresIn: "7d" },
-        null
+        NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
+        { expiresIn: '7d' },
+        null,
       );
       console.log(token);
-      //res.send({ token });
-
       if (token) {
-        console.log("token 0", token);
+        console.log('token 0', token);
         return res.send({ token });
       }
 
       if (!user) {
         return Promise.reject(
-          new UnauthorizedError("Неправильные почта или пароль")
+          new UnauthorizedError('Неправильные почта или пароль'),
         );
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
           return Promise.reject(
-            new UnauthorizedError("Неправильные почта или пароль")
+            new UnauthorizedError('Неправильные почта или пароль'),
           );
         }
         return res.status(200).send({
-          message: "Успешно авторизован",
-          token: jwt.sign({ _id: user._id }, "super-strong-secret", {
-            expiresIn: "7d",
+          message: 'Успешно авторизован',
+          token: jwt.sign({ _id: user._id }, 'super-strong-secret', {
+            expiresIn: '7d',
           }),
         });
       });
     })
     .catch((err) => {
       console.log(err);
-      return next(new UnauthorizedError("ошибка"));
+      return next(new UnauthorizedError('ошибка'));
     })
     .catch(next);
 };
