@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-frontend/dist
+frontend/dist/
 
 # Editor directories and files
 .vscode/*
