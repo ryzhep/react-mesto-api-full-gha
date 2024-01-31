@@ -2,6 +2,7 @@ const express = require('express');
 // eslint-disable-next-line no-unused-vars
 require('dotenv').config();
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -11,6 +12,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 console.log('test3');
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+app.use(cors());
 app.use(express.json());
 
 // мидлвар, который обоготит объект реквеста полем бади, когда этот бади будет полностью прочитан

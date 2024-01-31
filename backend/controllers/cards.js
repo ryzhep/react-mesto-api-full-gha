@@ -66,7 +66,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Такой карточки не существует');
       }
-      res.send({ data: card });
+      res.send(card);
     })
     .catch((err) => {
       if (err instanceof CastError) {
@@ -87,7 +87,7 @@ const dislikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Такой карточки не существует');
       }
-      res.send({ data: card });
+      res.send(card);
     })
     .catch((err) => {
       if (err instanceof CastError) {

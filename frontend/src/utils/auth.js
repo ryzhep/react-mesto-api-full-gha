@@ -28,10 +28,9 @@ export const login = (email, password) => {
   })
   .then(getResponse)
   .then(data => {
-    console.log(token);
     const token = data.token;
-        localStorage.setItem('jwt', token);
-        return data;
+    localStorage.setItem('jwt', token);
+    return data;
   });
   
 };
