@@ -81,14 +81,12 @@ const createUser = (req, res, next) => {
         email,
         password: hash,
       })
-        .then((data) => {
-          return res.status(CREATED_201).json({
-            name,
-            about,
-            avatar,
-            email,
-          });
-        })
+        .then(() => res.status(CREATED_201).json({
+          name,
+          about,
+          avatar,
+          email,
+        }))
         .catch((err) => {
           if (err.code === 11000) {
             return next(new ConflictError('Такой email уже существует')); // 409
