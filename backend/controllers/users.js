@@ -82,7 +82,6 @@ const createUser = (req, res, next) => {
         password: hash,
       })
         .then((data) => {
-          console.log('create user', data);
           return res.status(CREATED_201).json({
             name,
             about,
@@ -164,7 +163,6 @@ const login = (req, res, next) => {
   return UserModel.findOne({ email })
     .select('+password')
     .then((user) => {
-      console.log('user', user);
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key',
@@ -173,7 +171,6 @@ const login = (req, res, next) => {
       );
       console.log(token);
       if (token) {
-        console.log('token 0', token);
         return res.send({ token });
       }
 
