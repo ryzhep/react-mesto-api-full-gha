@@ -20,7 +20,7 @@ function Main({
     <main className="content">
       <section className="profile">
         <a
-          style={{ backgroundImage: `url(${currentUser.avatar})` }}
+          style={{ backgroundImage: `url(${avatar})` }}
           alt="Аватар профиля"
           className="profile__avatar"
           onClick={onEditAvatar}

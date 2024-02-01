@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      validate: {
-        validator: (url) => isUrl(url),
-        message: 'неправильная ссылка',
-      },
+      validator: (avatar) => isUrl(avatar, {
+        protocols: ['http', 'https'],
+        require_protocol: true,
+      }),
       default:
         'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     },
@@ -42,7 +42,11 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
   },
-
+  {
+    toJSON: { useProjection: true },
+    toObject: { useProjection: true },
+    versionKey: false,
+  },
 );
 
 module.exports = mongoose.model('user', userSchema);

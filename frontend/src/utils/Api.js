@@ -1,8 +1,7 @@
 
 class Api {
-  constructor({ url, headers }) {
+  constructor({ url }) {
     this._url = url;
-    this._headers = headers;
   }
 
   _sendRequest(url, options) {
@@ -42,16 +41,17 @@ class Api {
   }
 
   //Редактирование профиля
-  editProfile(data) {
+  editProfile({name, about}) {
     const token = localStorage.getItem('jwt');
     return this._sendRequest(`${this._url}/users/me`, {
       method: "PATCH",
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: data.name,
-        about: data.about,
+        name: name,
+        about: about,
       }),
     });
   }
@@ -64,23 +64,22 @@ class Api {
       headers:{
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        avatar: avatar.avatar
-      }),
+      body: JSON.stringify(avatar)
     });
   }
 
   //Добавление новой карточки
-  apiAddNewCard(newCard) {
+  apiAddNewCard({name, link}) {
     const token = localStorage.getItem('jwt');
     return this._sendRequest(`${this._url}/cards`, {
       method: "POST",
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: newCard.name,
-        link:newCard.link,
+        name: name,
+        link: link,
       }),
     });
   }
@@ -103,14 +102,15 @@ class Api {
     return this._sendRequest(`${this._url}/cards/${cardId}/likes`, {
       method: isLiked ? 'DELETE' : 'PUT',
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
     });
   }
 }
 
  const api = new Api({
-  url: "https://api.ryzhep.nomoredomainsmonster.ru",
+  url: "http://localhost:3000",
 // headers: {
 //   authorization: "9e1ba490-d05f-4831-95ed-e11f8659a9e1",
 //    "Content-Type": "application/json",'
