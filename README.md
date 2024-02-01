@@ -7,7 +7,7 @@
 158.160.27.101
 
 Frontend https://ryzhep.nomoredomainsmonster.ru
-Backend http://localhost:3000
+Backend https://api.ryzhep.nomoredomainsmonster.ru
 
 **Установка и запуск приложения:**
 1) Клонируйте репозиторий на свой компьютер.
