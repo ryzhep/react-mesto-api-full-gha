@@ -110,7 +110,7 @@ class Api {
 }
 
  const api = new Api({
-  url: "https://api.ryzhep.nomoredomainsmonster.ru",
+  url: "http://localhost:3000",
 // headers: {
 //   authorization: "9e1ba490-d05f-4831-95ed-e11f8659a9e1",
 //    "Content-Type": "application/json",'
