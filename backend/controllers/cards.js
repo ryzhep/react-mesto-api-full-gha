@@ -17,8 +17,7 @@ const getCards = (req, res, next) => {
 // СОЗДАНИЕ КАРТОЧКИ
 const createCard = async (req, res, next) => {
   const { name, link } = req.body;
-  const { _id: userId } = req.user;
-  return CardModel.create({ name, link, owner: userId })
+  CardModel.create({ name, link, owner: req.user._id })
     .then((card) => res.status(CREATED_201).json(card))
     .catch((err) => {
       if (err instanceof ValidationError) {

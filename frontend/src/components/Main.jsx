@@ -15,12 +15,13 @@ function Main({
 }) {
 
   const currentUser = React.useContext(CurrentUserContext);
+  console.log('currentUser', currentUser)
   
   return (
     <main className="content">
       <section className="profile">
         <a
-          style={{ backgroundImage: `url(${avatar})` }}
+          style={{ backgroundImage: `url(${currentUser.avatar})` }}
           alt="Аватар профиля"
           className="profile__avatar"
           onClick={onEditAvatar}

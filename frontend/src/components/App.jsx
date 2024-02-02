@@ -144,7 +144,7 @@ function App() {
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some(id => id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
@@ -165,7 +165,7 @@ function App() {
     api
       .deleteCard(selectedCardDelete._id)
       .then(() => {
-        const newCards = cards.filter((c) => c._id !== selectedCardDelete._id);
+        const newCards = cards.filter(c => c._id !== selectedCardDelete._id);
         setCards(newCards);
         setSelectedCardDelete({});
         closeAllPopups();
@@ -197,13 +197,13 @@ function App() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
   }
  
-  function handleUpdateUser(data) {
+  function handleUpdateUser({ name, about }) {
     api
-      .editProfile(data)
+      .editProfile({ name, about })
       .then(() => {
         setCurrentUser((prevUser) => ({
           ...prevUser, // сохраняем предыдущие свойства пользователя
-          ...data, // обновляем только измененные свойства из data
+          ...( name, about ), // обновляем только измененные свойства из data
         }));
         closeAllPopups();
       })
@@ -216,7 +216,8 @@ function App() {
     api
       .newAvatar(avatar)
       .then((newUserData) => {
-        setCurrentUser(newUserData);
+        console.log('newUserData',newUserData)
+        setCurrentUser(avatar);
         closeAllPopups();
       })
       .catch((error) => {

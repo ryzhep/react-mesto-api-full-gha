@@ -59,6 +59,7 @@ class Api {
   //Редактирование аватара
   newAvatar(avatar) {
     const token = localStorage.getItem('jwt');
+    console.log('JSON.stringify(avatar)', JSON.stringify(avatar))
     return this._sendRequest(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers:{
