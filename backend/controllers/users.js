@@ -52,7 +52,7 @@ const getCurrentUser = (req, res, next) => {
         { expiresIn: '7d' },
         null,
       );
-      res.send({ token, ...user._doc });
+      res.send({ token, ...user });
     })
     .catch((err) => {
       if (err instanceof CastError) {
@@ -131,7 +131,7 @@ const updateUser = (req, res, next) => {
 // ОБНОВЛЕНИЕ АВАТАРА ПОЛЬЗОВАТЕЛЯ
 const updateUserAvatar = (req, res, next) => {
   const owner = req.user._id;
-  console.log('req.body', req.body),
+  console.log('req.body', req.body);
   UserModel.findByIdAndUpdate(
     owner,
     { avatar: req.body.avatar },

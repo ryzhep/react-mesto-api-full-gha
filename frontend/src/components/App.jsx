@@ -203,7 +203,7 @@ function App() {
       .then(() => {
         setCurrentUser((prevUser) => ({
           ...prevUser, // сохраняем предыдущие свойства пользователя
-          ...( name, about ), // обновляем только измененные свойства из data
+          ...{ name, about }, // обновляем только измененные свойства из data
         }));
         closeAllPopups();
       })
@@ -215,8 +215,8 @@ function App() {
   function handleUpdateAvatar(avatar) {
     api
       .newAvatar(avatar)
-      .then((newUserData) => {
-        console.log('newUserData',newUserData)
+      .then((avatar) => {
+        console.log('newUserData',avatar)
         setCurrentUser(avatar);
         closeAllPopups();
       })
